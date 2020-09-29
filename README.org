@@ -1,0 +1,12 @@
+#+TITLE: Readme
+#+AUTHOR: Hisbaan Noorani
+
+This is an arch setup script that adds my dotfiles (from either my [[https://github.com/hisbaan/dotfiles][desktop]] repo or my [[https://github.com/hisbaan/dotfiles-laptop][laptop]] repo) then installs my programs listed in ~programs~ and ~programs-aur~
+
+* Installation
+To install, open a shell and paste the following command:
+
+#+BEGIN_SRC sh
+git clone git@github.com:hisbaan/hass
+hass/hass.sh
+#+END_SRC
