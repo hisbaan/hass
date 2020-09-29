@@ -15,22 +15,22 @@ esac
 
 git clone "$dotfiles_repo" $HOME/hass/dotfiles
 
-[ ! -d $HOME/.config ] [ mkdir $HOME/.config ]
+[ ! -d $HOME/.config ] && mkdir $HOME/.config
 mv $HOME/hass/dotfiles/.config/* $HOME/.config/
 
-[ ! -d $HOME/.local/bin ] [ mkdir -p $HOME/.local/bin ]
+[ ! -d $HOME/.local/bin ] && mkdir -p $HOME/.local/bin
 mv $HOME/hass/dotfiles/.local/bin/* $HOME/.local/bin/
 
-[ ! -d $HOME/.xcolors ] [ mkdir -p $HOME/.xcolors ]
+[ ! -d $HOME/.xcolors ] && mkdir -p $HOME/.xcolors
 mv $HOME/hass/dotfiles/.xcolors/* $HOME/.xcolors/
 
-[ ! -d $HOME/.icons ] [ mkdir -p $HOME/.icons ]
+[ ! -d $HOME/.icons ] && mkdir -p $HOME/.icons
 mv $HOME/hass/dotfiles/.icons/* $HOME/.icons/
 
-[ ! -d $HOME/.themes ] [ mkdir -p $HOME/.themes ]
+[ ! -d $HOME/.themes ] && mkdir -p $HOME/.themes
 mv $HOME/hass/dotfiles/.themes/* $HOME/.themes/
 
-[ ! -d $HOME/.doom.d ] [ mkdir -p $HOME/.doom.d ]
+[ ! -d $HOME/.doom.d ] && mkdir -p $HOME/.doom.d
 mv $HOME/hass/dotfiles/.doom.d/* $HOME/.doom.d/
 
 mv $HOME/hass/dotfiles/.xinitrc $HOME/
