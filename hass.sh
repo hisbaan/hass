@@ -41,7 +41,10 @@ cp $HOME/hass/dotfiles/.xinitrc $HOME/
 ### Installing packages ###
 ###########################
 
-sudo pacman -Syu --needed < $HOME/hass/dotfiles/pkglist.txt
+# enable multilib repos in pacman
+sudo sh -c "sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf"
+
+sudo pacman -Syu --needed $(cat $HOME/hass/dotfiles/pkglist.txt)
 
 git clone https://aur.archlinux.org/yay.git $HOME/yay
 cd $HOME/yay
