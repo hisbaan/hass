@@ -1,6 +1,3 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
 ###########################
 ### Installing Dotfiles ###
 ###########################
@@ -43,6 +40,8 @@ cp $HOME/hass/dotfiles/.xinitrc $HOME/
 
 # enable multilib repos in pacman
 sudo sh -c "sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf"
+
+sudo reflector --verbose -l 200 -n 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
 
 sudo pacman -Syu --needed $(cat $HOME/hass/dotfiles/pkglist.txt)
 
