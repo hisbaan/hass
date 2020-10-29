@@ -47,13 +47,13 @@ sudo reflector --verbose -l 200 -n 20 -p https --sort rate --save /etc/pacman.d/
 
 sudo pacman -Syu --needed $(cat $HOME/hass/dotfiles/pkglist.txt)
 
-git clone https://aur.archlinux.org/yay.git $HOME/yay
+git clone https://aur.archlinux.org/paru.git $HOME/paru
 cd $HOME/yay
 makepkg -si
 cd $HOME
 rm -rf yay
 
-yay -S --needed < $HOME/hass/dotfiles/pkglist-aur.txt
+paru -S --needed < $HOME/hass/dotfiles/pkglist-aur.txt
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 git clone https://github.com/zdharma/fast-syntax-highlighting.git $HOME/.config/zsh/oh-my-zsh/custom/plugins/fast-syntax-highlighting
