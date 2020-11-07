@@ -11,6 +11,7 @@ case "$input" in
 esac
 
 sudo sh -c "echo 'ZDOTDIR=$HOME/.config/zsh' >> /etc/zsh/zshenv"
+export ZDOTDIR=$HOME/.config/zsh
 
 git clone "$dotfiles_repo" $HOME/hass/dotfiles
 
