@@ -48,17 +48,18 @@ sudo reflector --verbose -l 200 -n 20 -p https --sort rate --save /etc/pacman.d/
 sudo pacman -Syu --needed $(cat $HOME/hass/dotfiles/pkglist.txt)
 
 git clone https://aur.archlinux.org/paru.git $HOME/paru
-cd $HOME/yay
+cd $HOME/paru
 makepkg -si
 cd $HOME
-rm -rf yay
+rm -rf paru
 
 paru -S --needed < $HOME/hass/dotfiles/pkglist-aur.txt
 
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-git clone https://github.com/zdharma/fast-syntax-highlighting.git $HOME/.config/zsh/oh-my-zsh/custom/plugins/fast-syntax-highlighting
+# Change this to fit the new install method. Maybe just make git sub-repositories and have it clone that too? idk
+# sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# git clone https://github.com/zdharma/fast-syntax-highlighting.git $HOME/.config/zsh/oh-my-zsh/custom/plugins/fast-syntax-highlighting
 
-git clone https://github.com/zigius/expand-ealias.plugin.zsh $HOME/.config/zsh/oh-my-zsh/custom/plugins/expand-ealias
-echo "ealias sp='sudo pacman'" >> $HOME/.config/zsh/oh-my-zsh/custom/zsh-ealias.zsh
+# git clone https://github.com/zigius/expand-ealias.plugin.zsh $HOME/.config/zsh/oh-my-zsh/custom/plugins/expand-ealias
+# echo "ealias sp='sudo pacman'" >> $HOME/.config/zsh/oh-my-zsh/custom/zsh-ealias.zsh
 
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.config/zsh/oh-my-zsh/custom/themes/powerlevel10k
+# git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.config/zsh/oh-my-zsh/custom/themes/powerlevel10k
