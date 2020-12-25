@@ -10,6 +10,8 @@ case "$input" in
     2) dotfiles_repo="https://github.com/hisbaan/dotfiles-laptop" ;;
 esac
 
+echo ""
+echo "${bold}Getting dotfiles"
 sudo sh -c "echo 'ZDOTDIR=$HOME/.config/zsh' >> /etc/zsh/zshenv"
 export ZDOTDIR=$HOME/.config/zsh
 
@@ -42,25 +44,42 @@ cp $HOME/hass/dotfiles/.xinitrc $HOME/
 # enable multilib repos in pacman
 sudo sh -c "sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf"
 
+# Installing and using reflector
+echo ""
+echo "${bold}Installing reflector"
 sudo pacman -S reflector
-
+echo ""
+echo "${bold}Rating mirrors. This may take some time"
 sudo reflector --verbose -l 200 -n 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
 
+# Installing packages from the default repos
+echo ""
+echo "${bold}Installing packages"
 sudo pacman -Syu --needed $(cat $HOME/hass/dotfiles/pkglist.txt)
 
+# Installing AUR helper
+echo ""
+echo "${bold}Installing paru (AUR helper)"
 git clone https://aur.archlinux.org/paru.git $HOME/paru
 cd $HOME/paru
 makepkg -si
 cd $HOME
 rm -rf paru
 
+# Installing AUR packages
+echo ""
+echo "${bold}Installing AUR packages"
 paru -S --needed < $HOME/hass/dotfiles/pkglist-aur.txt
 
-# Change this to fit the new install method. Maybe just make git sub-repositories and have it clone that too? idk
-# sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-# git clone https://github.com/zdharma/fast-syntax-highlighting.git $HOME/.config/zsh/oh-my-zsh/custom/plugins/fast-syntax-highlighting
+# Installing ZSH plugins
+echo ""
+echo "${bold}Installing ZSH plugins"
+mkdir $HOME/.config/zsh/plugins
+git clone https://github.com/sharat87/zsh-vim-mode $HOME/.config/zsh/plugins/zsh-vim-mode
+git clone https://github.com/zdharma/fast-syntax-highlighting $HOME/.config/zsh/plugins/fast-syntax-hightlighting
 
-# git clone https://github.com/zigius/expand-ealias.plugin.zsh $HOME/.config/zsh/oh-my-zsh/custom/plugins/expand-ealias
-# echo "ealias sp='sudo pacman'" >> $HOME/.config/zsh/oh-my-zsh/custom/zsh-ealias.zsh
-
-# git clone --depth=1 https://github.com/romkatv/powerlevel10k.git $HOME/.config/zsh/oh-my-zsh/custom/themes/powerlevel10k
+# Installing doom emacs
+echo ""
+echo "${bold}Installing doom emacs"
+git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
+$HOME/.emacs.d/bin/doom install
