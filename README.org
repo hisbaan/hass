@@ -7,6 +7,6 @@ This is an arch setup script that adds my dotfiles (from either my [[https://git
 To install, open a shell and paste the following command:
 
 #+BEGIN_SRC sh
-git clone git@github.com:hisbaan/hass
-hass/hass.sh
+git clone git@github.com:hisbaan/hass $HOME/hass; \
+$HOME/hass/hass.sh
 #+END_SRC
