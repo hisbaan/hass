@@ -24,14 +24,17 @@ git clone "$dotfiles_repo" $HOME/hass/dotfiles
 echo ""
 echo "${bold}Backing up current config to ~/hass-backup"
 mkdir -p $HOME/hass-backup
-[ -d $HOME/.config ]            && mv $HOME/.config               $HOME/hass-backup
-[ -d $HOME/.local/bin/scripts ] && mv $HOME/.local/bin/scripts    $HOME/hass-backup
-[ -d $HOME/.xcolors ]           && mv $HOME/.xcolors              $HOME/hass-backup
-[ -d $HOME/.icons ]             && mv $HOME/.icons                $HOME/hass-backup
-[ -d $HOME/.themes ]            && mv $HOME/.themes               $HOME/hass-backup
-[ -d $HOME/.doom.d ]            && mv $HOME/.doom.d               $HOME/hass-backup
-[ -d $HOME/.unison ]            && mv $HOME/.unison               $HOME/hass-backup
-[ -f $HOME/.xinitrc ]           && mv $HOME/.xinitrc              $HOME/hass-backup
+mkdir -p $HOME/hass-backup/.local/share
+mkdir -p $HOME/hass-backup/.local/bin/scripts
+[ -d $HOME/.config ]                && mv $HOME/.config               $HOME/hass-backup/.config
+[ -d $HOME/.local/bin/scripts ]     && mv $HOME/.local/bin/scripts    $HOME/hass-backup/.local/bin/scripts
+[ -d $HOME/.xcolors ]               && mv $HOME/.xcolors              $HOME/hass-backup/.xcolors
+[ -d $HOME/.icons ]                 && mv $HOME/.icons                $HOME/hass-backup/.icons
+[ -d $HOME/.themes ]                && mv $HOME/.themes               $HOME/hass-backup/.themes
+[ -d $HOME/.doom.d ]                && mv $HOME/.doom.d               $HOME/hass-backup/.doom.d
+[ -d $HOME/.unison ]                && mv $HOME/.unison               $HOME/hass-backup/.unison
+[ -f $HOME/.xinitrc ]               && mv $HOME/.xinitrc              $HOME/hass-backup/.xinitrc
+[ -d $HOME/.local/share/flavours ]  && mv $HOME/.local/share/flavours $HOME/hass-backup/.local/share/flavours
 
 # Install new configs.
 echo ""
@@ -60,6 +63,9 @@ mkdir -p $HOME/.unison
 cp -r $DOT/.unison/* $HOME/.unison/
 
 cp $DOT/.xinitrc $HOME/
+
+mkdir -p $HOME/.local/share/flavours
+cp $DOT/.local/share/flavours $HOME/.local/share/flavours
 
 ###########################
 ### Installing packages ###
