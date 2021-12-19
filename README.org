@@ -1,7 +1,7 @@
 #+TITLE: Hisbaan's Arch Setup Script (HASS)
 #+AUTHOR: Hisbaan Noorani
 
-This is an arch setup script that adds my dotfiles (from either my [[https://github.com/hisbaan/dotfiles][desktop]] repo or my [[https://github.com/hisbaan/dotfiles-laptop][laptop]] repo) then installs my programs listed in ~pkglist~ and ~pkglist-aur~
+This is an arch setup script that adds my dotfiles (from either my [[https://github.com/hisbaan/dotfiles][desktop]] repo or my [[https://github.com/hisbaan/dotfiles/tree/laptop][laptop]] repo) then installs my programs listed in ~pkglist~ and ~pkglist-aur~
 
 * Installation
 To install, open a shell and paste the following command:
