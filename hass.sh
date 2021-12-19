@@ -1,24 +1,36 @@
 #!/bin/env bash
 
+if [[ ! $(pacman -Qi git) ]] || [[ ! $(pacman -Qi sudo) ]]
+then
+    echo "${bold}Please install the above mentioned packages via \`sudo pacman -S <package-name>\` then re-run the script"
+    exit 1
+fi
+
 ###########################
 ### Installing Dotfiles ###
 ###########################
+
+cd $HOME
 
 echo -e "Which dotfiles repo?\n    [1] Desktop\n    [2] Laptop"
 read input
 
 case "$input" in
-    1) dotfiles_repo="https://github.com/hisbaan/dotfiles" ;;
-    2) dotfiles_repo="https://github.com/hisbaan/dotfiles-laptop" ;;
+    1) dotfiles_branch="desktop" ;;
+    2) dotfiles_branch="laptop" ;;
 esac
 
 echo ""
 echo "${bold}Getting dotfiles"
 
+# Clone dotfiles repository then switch to the correct branch
+git clone https://github.com/hisbaan/dotfiles $HOME/hass/dotfiles
+cd $HOME/hass/dotfiles
+git checkout $dotfiles_branch
+cd $HOME
+
 sudo sh -c "echo 'ZDOTDIR=$HOME/.config/zsh' >> /etc/zsh/zshenv"
 export ZDOTDIR=$HOME/.config/zsh
-
-git clone "$dotfiles_repo" $HOME/hass/dotfiles
 
 # Backing up old configs.
 echo ""
@@ -105,8 +117,9 @@ paru -S --needed < $DOT/pkglist-aur.txt
 echo ""
 echo "${bold}Installing ZSH plugins"
 mkdir $HOME/.config/zsh/plugins
-git clone https://github.com/sharat87/zsh-vim-mode $HOME/.config/zsh/plugins/zsh-vim-mode
+git clone https://github.com/softmoth/zsh-vim-mode $HOME/.config/zsh/plugins/zsh-vim-mode
 git clone https://github.com/zdharma/fast-syntax-highlighting $HOME/.config/zsh/plugins/fast-syntax-hightlighting
+git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.config/zsh/plugins/zsh-autosuggestions
 
 # Installing doom emacs.
 echo ""
@@ -116,3 +129,6 @@ $HOME/.emacs.d/bin/doom install
 
 echo ""
 echo "Done! Enjoy the dots!" | figlet
+
+echo ""
+echo "N.B.: Some things may not be working correctly immediately. Please restart your machine to ensure that everything is working as intended."
