@@ -119,7 +119,6 @@ echo "${bold}Installing ZSH plugins"
 mkdir $HOME/.config/zsh/plugins
 git clone https://github.com/softmoth/zsh-vim-mode $HOME/.config/zsh/plugins/zsh-vim-mode
 git clone https://github.com/zdharma/fast-syntax-highlighting $HOME/.config/zsh/plugins/fast-syntax-hightlighting
-git clone https://github.com/zsh-users/zsh-autosuggestions $HOME/.config/zsh/plugins/zsh-autosuggestions
 
 # Installing doom emacs.
 echo ""
