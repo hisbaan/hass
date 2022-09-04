@@ -6,14 +6,17 @@ then
     exit 1
 fi
 
+echo -e "${bold}Please ensure your mirrorlist is rated to speed up setup time. You can do this with the following commands\nsudo pacman -S reflector\nsudo reflector --verbose -l 200 -n 20 -p https --sort rate -c Canada --save /etc/pacman.d/mirrorlist"
+
 ###########################
 ### Installing Dotfiles ###
 ###########################
 
-cd $HOME
+cd "$HOME" || exit
 
+echo ""
 echo -e "Which dotfiles repo?\n    [1] Desktop\n    [2] Laptop"
-read input
+read -r input
 
 case "$input" in
     1) dotfiles_branch="desktop" ;;
@@ -24,107 +27,90 @@ echo ""
 echo "${bold}Getting dotfiles"
 
 # Clone dotfiles repository then switch to the correct branch
-git clone https://github.com/hisbaan/dotfiles $HOME/hass/dotfiles
-cd $HOME/hass/dotfiles
+git clone https://github.com/hisbaan/dotfiles "$HOME/hass/dotfiles" || exit
+cd "$HOME/hass/dotfiles" || exit
 git checkout $dotfiles_branch
-cd $HOME
+cd "$HOME" || exit
 
+sudo mkdir -p /etc/zsh
 sudo sh -c "echo 'ZDOTDIR=$HOME/.config/zsh' >> /etc/zsh/zshenv"
-export ZDOTDIR=$HOME/.config/zsh
+export ZDOTDIR="$HOME/.config/zsh"
 
 # Backing up old configs.
 echo ""
 echo "${bold}Backing up current config to ~/hass-backup"
-mkdir -p $HOME/hass-backup
-mkdir -p $HOME/hass-backup/.local/share
-mkdir -p $HOME/hass-backup/.local/bin/scripts
-[ -d $HOME/.config ]                && mv $HOME/.config               $HOME/hass-backup/.config
-[ -d $HOME/.local/bin/scripts ]     && mv $HOME/.local/bin/scripts    $HOME/hass-backup/.local/bin/scripts
-[ -d $HOME/.xcolors ]               && mv $HOME/.xcolors              $HOME/hass-backup/.xcolors
-[ -d $HOME/.icons ]                 && mv $HOME/.icons                $HOME/hass-backup/.icons
-[ -d $HOME/.themes ]                && mv $HOME/.themes               $HOME/hass-backup/.themes
-[ -d $HOME/.doom.d ]                && mv $HOME/.doom.d               $HOME/hass-backup/.doom.d
-[ -d $HOME/.unison ]                && mv $HOME/.unison               $HOME/hass-backup/.unison
-[ -f $HOME/.xinitrc ]               && mv $HOME/.xinitrc              $HOME/hass-backup/.xinitrc
-[ -d $HOME/.local/share/flavours ]  && mv $HOME/.local/share/flavours $HOME/hass-backup/.local/share/flavours
+mkdir -p "$HOME/hass-backup"
+mkdir -p "$HOME/hass-backup/.local/share"
+mkdir -p "$HOME/hass-backup/.local/bin/scripts"
+[ -d "$HOME/.config" ]                && mv "$HOME/.config"               "$HOME/hass-backup/.config"
+[ -d "$HOME/.local/bin/scripts" ]     && mv "$HOME/.local/bin/scripts"    "$HOME/hass-backup/.local/bin/scripts"
+[ -d "$HOME/.icons" ]                 && mv "$HOME/.icons"                "$HOME/hass-backup/.icons"
+[ -d "$HOME/.themes" ]                && mv "$HOME/.themes"               "$HOME/hass-backup/.themes"
+[ -d "$HOME/.doom.d" ]                && mv "$HOME/.doom.d"               "$HOME/hass-backup/.doom.d"
+[ -d "$HOME/.unison" ]                && mv "$HOME/.unison"               "$HOME/hass-backup/.unison"
+[ -f "$HOME/.xinitrc" ]               && mv "$HOME/.xinitrc"              "$HOME/hass-backup/.xinitrc"
+[ -d "$HOME/.local/share/flavours" ]  && mv "$HOME/.local/share/flavours" "$HOME/hass-backup/.local/share/flavours"
 
 # Install new configs.
 echo ""
 echo "${bold}Moving new config to correct location"
 DOT=$HOME/hass/dotfiles
 
-mkdir $HOME/.config
-cp -r $DOT/.config/* $HOME/.config/
+mkdir "$HOME/.config"
+cp -r "$DOT/.config/*" "$HOME/.config/"
 
-mkdir -p $HOME/.local/bin/scripts
-cp -r $DOT/.local/bin/scripts/* $HOME/.local/bin/scripts
+mkdir -p "$HOME/.local/bin/scripts"
+cp -r "$DOT/.local/bin/scripts/*" "$HOME/.local/bin/scripts"
 
-mkdir -p $HOME/.xcolors
-cp -r $DOT/.xcolors/* $HOME/.xcolors/
+mkdir -p "$HOME/.icons"
+cp -r "$DOT/.icons/*" "$HOME/.icons/"
 
-mkdir -p $HOME/.icons
-cp -r $DOT/.icons/* $HOME/.icons/
+mkdir -p "$HOME/.themes"
+cp -r "$DOT/.themes/*" "$HOME/.themes/"
 
-mkdir -p $HOME/.themes
-cp -r $DOT/.themes/* $HOME/.themes/
+mkdir -p "$HOME/.doom.d"
+cp -r "$DOT/.doom.d/*" "$HOME/.doom.d/"
 
-mkdir -p $HOME/.doom.d
-cp -r $DOT/.doom.d/* $HOME/.doom.d/
+mkdir -p "$HOME/.unison"
+cp -r "$DOT/.unison/*" "$HOME/.unison/"
 
-mkdir -p $HOME/.unison
-cp -r $DOT/.unison/* $HOME/.unison/
+cp "$DOT/.xinitrc" "$HOME/"
 
-cp $DOT/.xinitrc $HOME/
-
-mkdir -p $HOME/.local/share/flavours
-cp $DOT/.local/share/flavours $HOME/.local/share/flavours
+mkdir -p "$HOME/.local/share/flavours"
+cp -r "$DOT/.local/share/flavours" "$HOME/.local/share/flavours"
 
 ###########################
 ### Installing packages ###
 ###########################
 
-# Enable multilib repos in pacman.
-sudo sh -c "sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf"
-
-# Installing and using reflector.
-echo ""
-echo "${bold}Installing reflector"
-sudo pacman -S reflector
-echo ""
-echo "${bold}Rating mirrors. This may take some time"
-sudo reflector --verbose -l 200 -n 20 -p https --sort rate --save /etc/pacman.d/mirrorlist
-
 # Installing packages from the default repos.
 echo ""
 echo "${bold}Installing packages"
-sudo pacman -Syu --needed $(cat $DOT/pkglist.txt)
+sudo pacman -Syu --needed "$(cat "$DOT/pkglist.txt")"
 
 # Installing AUR helper.
 echo ""
 echo "${bold}Installing paru (AUR helper)"
-git clone https://aur.archlinux.org/paru.git $HOME/paru
-cd $HOME/paru
+git clone https://aur.archlinux.org/paru-bin.git "$HOME/paru"
+cd "$HOME/paru" || exit
 makepkg -si
-cd $HOME
+cd "$HOME" || exit
 rm -rf paru
+
+# Extra GPG keys
+curl https://github.com/olets.gpg | gpg --import
 
 # Installing AUR packages.
 echo ""
 echo "${bold}Installing AUR packages"
-paru -S --needed < $DOT/pkglist-aur.txt
+paru -S --needed < "$DOT/pkglist-aur.txt"
 
 # Installing ZSH plugins.
 echo ""
 echo "${bold}Installing ZSH plugins"
-mkdir $HOME/.config/zsh/plugins
-git clone https://github.com/softmoth/zsh-vim-mode $HOME/.config/zsh/plugins/zsh-vim-mode
-git clone https://github.com/zdharma/fast-syntax-highlighting $HOME/.config/zsh/plugins/fast-syntax-hightlighting
-
-# Installing doom emacs.
-echo ""
-echo "${bold}Installing doom emacs"
-git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
-$HOME/.emacs.d/bin/doom install
+mkdir "$HOME/.config/zsh/plugins"
+git clone https://github.com/softmoth/zsh-vim-mode "$HOME/.config/zsh/plugins/zsh-vim-mode"
+git clone https://github.com/z-shell/F-Sy-H "$HOME/.config/zsh/plugins/F-Sy-H"
 
 echo ""
 echo "Done! Enjoy the dots!" | figlet
