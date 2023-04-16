@@ -30,6 +30,7 @@ echo "${bold}Getting dotfiles"
 git clone https://github.com/hisbaan/dotfiles "$HOME/hass/dotfiles" || exit
 cd "$HOME/hass/dotfiles" || exit
 git checkout $dotfiles_branch
+git pull --recurse-submodules
 cd "$HOME" || exit
 
 sudo mkdir -p /etc/zsh
